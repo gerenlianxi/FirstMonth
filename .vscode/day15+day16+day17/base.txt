@@ -1,0 +1,238 @@
+git init          # 初始化仓库（第一次用）
+git add .         # 把所有文件加入暂存区
+git commit -m "first"  # 提交版本 + 写备注
+
+1. git init
+作用：把当前文件夹变成 Git 可以管理的仓库只需要执行一次
+2. git add .
+作用：把所有修改的文件加入暂存区. 代表 “所有文件”
+3. git commit -m "first"
+作用：把代码正式提交，生成一个版本-m "xxx" 是写版本说明（必须写）
+1. Git 会在你的项目文件夹里
+创建一个隐藏文件夹：.git
+
+报错解决：Author identity unknown
+第一行（设置你的邮箱）
+git config --global user.email "你随便写一个邮箱就行"
+第二行（设置你的名字）
+git config --global user.name "你的名字"
+给你直接能用的示例（复制即可）
+git config --global user.email "test@example.com"
+git config --global user.name "myPython"
+
+分支 branch（多人同时写代码互不干扰）
+切换分支 checkout
+回滚 reset（代码写错一键回到过去！）
+git branch             # 查看分支
+git branch 名字        # 创建分支
+git checkout 名字      # 切换分支
+git add .              # 提交代码
+git commit -m "xxx"
+git reset --hard 版本号  # 回滚代码（时光机）
+一、先讲：什么是 Git 分支（branch）？
+超级通俗解释：
+主分支（main/master）= 正式版游戏新分支 = 你开个单机副本
+你在副本里随便改、随便测试
+不会影响正式版
+改好了再合并进去
+多人开发 = 每人开一个分支，完全不干扰！
+1. 查看当前有哪些分支
+git branch
+前面带 * 的 = 你现在所在的分支
+2. 创建一个新分支（叫 dev）
+git branch dev
+3. 切换到新分支
+git checkout dev
+现在你就在 独立空间 里写代码了！改什么都不会影响主分支！
+4. 想切回主分支
+git checkout master
+三、什么是 回滚（reset）？
+意思：
+代码写错、改崩、删错 → 一键回到过去任何一个版本！
+先看历史版本
+git log
+会出现一大串：
+plaintext
+commit a1b2c3d4e5f6...  这就是版本号
+一键回滚过去
+git reset --hard a1b2c3d
+
+# 1. 查看分支
+git branch
+# 2. 创建分支 test
+git branch test
+# 3. 切换到 test
+git checkout test
+# 4. 随便改个代码，然后提交
+git add .
+git commit -m "测试分支提交"
+# 5. 切回主分支（代码会变回原来样子！）
+git checkout master
+# 6. 查看历史版本
+git log
+# 7. 回滚到过去版本（复制版本号前6位）
+git reset --hard 这里填版本号前6位
+
+git merge 分支名    # 合并分支（把别人代码合进来）
+git branch -d 分支名 # 删除不需要的分支
+主分支 master = 正式道路你的分支 test = 旁边修的小路
+合并 = 把小路连回主路你在分支写的所有新代码 → 全部合并到主版本！
+1️ 先切回主分支
+git checkout master
+2️ 执行合并（把 test 分支合进来）
+git merge test
+三、用完分支可以删掉（干净整洁）
+git branch -d test
+# 1. 回到主分支
+git checkout master
+# 2. 合并 test 分支的代码到主线
+git merge test
+# 3. 查看结果
+git log --oneline
+# 4. 删除旧分支（可选）
+git branch -d test
+git checkout master → 切到主线
+git branch dev → 创建新功能分支
+git checkout dev → 去写代码
+git add . + git commit → 提交
+git checkout master → 切回主线
+git merge dev → 合并新功能
+git log 查看日志
+按 q 退出
+按 ↑↓ 可以上下翻日志
+
+注册 GitHub 账号
+配置 SSH（安全连接，不用输密码）
+关联本地仓库与云端
+git push 把代码上传到 GitHub
+全世界都能看到你的项目！
+二、配置 SSH 密钥（最重要一步）
+作用：让你的电脑和 GitHub 信任彼此，不用每次输密码
+1. 打开 VS Code 终端，输入：
+ssh-keygen -t ed25519 -C "你的GitHub邮箱"
+2. 连续按 3 次回车（不用输入任何东西）
+复制你的公钥
+正确命令（Windows 100% 能用）
+type %userprofile%\.ssh\id_ed25519.pub
+运行后，屏幕会输出一长串密钥你把它完整复制（从 ssh-ed25519 开头到最后你的邮箱）
+复制完后，我们继续：
+第二步：打开 GitHub 添加密钥
+登录 GitHub → 点右上角头像 → Settings
+左边菜单找到：SSH and GPG keys
+点绿色按钮：New SSH key
+Title 随便填：myPC
+Key 框 把你刚才复制的内容粘贴进去
+点 Add SSH key
+完成！你的电脑和 GitHub 永久信任彼此！
+第三步：回到 GitHub，创建仓库
+点右上角 + → New repository
+Repository name 填：FirstMonth
+直接拉到最下面，点 Create repository
+第四步：复制 GitHub 给你的 SSH 地址
+长这样：
+plaintext
+git@github.com:你的用户名/FirstMonth.git
+第五步：在你的项目终端执行
+git remote add origin 你复制的地址
+第六步：最终上传！
+git push -u origin master
+
+二、SSH 的原理是什么？（一句话秒懂）
+SSH = 加密安全通道 + 身份锁
+它靠 两把钥匙 工作：
+私钥（id_ed25519）留在你电脑里，绝对不能给别人→ 相当于你家的钥匙
+公钥（id_ed25519.pub）你放到 GitHub 上→ 相当于你家的门锁
+连接过程：
+你电脑拿私钥开锁
+GitHub 用你上传的公钥验证
+匹配成功 → 直接进入，不用密码
+总结：
+SSH = 无密码安全登录
+密钥 = 专属通行证
+yes = 信任 GitHub，永久保存
+三、你刚才做的所有步骤，原理总结
+1. ssh-keygen
+生成一对钥匙（公钥 + 私钥）
+2. 把公钥复制到 GitHub
+告诉 GitHub：只认这把钥匙
+3. 输入 yes
+电脑记住 GitHub，以后不再询问
+4. git push
+通过加密通道，安全上传代码
+ssh-keygen
+= 你造了一把锁 + 一把钥匙
+2. 你把公钥粘贴到 GitHub
+= 把锁放在 GitHub
+3. git push
+= 电脑自动拿出私钥，开锁，登录成功
+4. 你输入 yes
+= 你信任 GitHub 这个网站
+
+
+公钥 = 锁 → 可以公开，随便给
+私钥 = 唯一钥匙 → 绝密，绝对不能给别人
+公钥加密，私钥解密
+GitHub 存公钥，你电脑存私钥
+双向验证，安全无敌
+
+一、多人协作的5 个核心步骤（超级清晰）
+1. 先有一个云端仓库（GitHub）
+老板 / 组长创建一个项目，大家都从这里下载代码：
+git clone 仓库地址
+2. 每个人都创建自己的分支
+绝对不允许直接在主分支（master）写代码！
+每个人新建自己的分支：
+git checkout -b 我的分支名
+比如：
+dev-zhangsan
+dev-lisi
+3. 各自写代码，互不干扰
+你改你的，他改他的每个人都在自己的分支里干活
+git add .
+git commit -m "我完成了xx功能"
+4. 写完代码，推送到云端自己的分支
+git push origin 我的分支名
+5. 发起合并，把代码合进主线
+在 GitHub 上点 Pull Request (PR)组长审核通过 → 合并到主分支
+✅ 项目更新完成！
+二、别人更新了代码，你怎么同步？
+别人合并了新代码，你要拉取最新版：
+git checkout master
+git pull origin master
+然后再回到你的分支继续写：
+git checkout 你的分支
+三、为什么要这么做？（核心原理）
+因为分支 = 隔离空间
+主分支永远保持稳定
+你写错代码不会影响别人
+多人同时开发不会乱
+Git 会自动合并不同人的代码
+四、最形象的比喻（秒懂）
+GitHub 云端 = 总项目文件夹
+master 主分支 = 正式版
+你的分支 = 你的独立草稿
+git push = 把草稿上传
+PR = 申请把草稿放进正式版
+git pull = 下载别人更新的正式版
+五、多人协作的黄金规则（公司必守）
+不在主分支直接写代码
+一个功能一个分支
+写完先提交再推送
+经常拉取最新代码，避免冲突
+合并前必须经过审核
+回到你的本地项目文件夹
+打开 VS Code 终端，输入：
+1. 关联云端仓库
+git remote add origin 你复制的SSH地址
+2. 第一次上传代码
+git push -u origin master
+把这个 SSH 地址发给队友：
+plaintext
+git@github.com:你的用户名/FirstMonth.git
+队友只需要运行：
+git clone 地址
+
+合并完之后，所有人同步最新代码
+团队其他人只需要：
+git checkout master
+git pull
