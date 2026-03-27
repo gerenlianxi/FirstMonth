@@ -1,0 +1,7 @@
+Day1：基础语法
+Day2：变量、字符串
+Day3：列表、字典
+Day4：if判断
+Day5：for/while循环
+Day6：函数
+Day7：文件读写
