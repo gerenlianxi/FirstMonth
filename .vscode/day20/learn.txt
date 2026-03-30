@@ -1,0 +1,123 @@
+# 🎉 Day20：requests 库 —— 发送网络请求（Python 最实用库）
+今天你要学会：**让 Python 自动访问网站、爬数据、发请求、拿结果**
+这是**爬虫、接口测试、自动化办公**的基础！
+我给你**最清晰、最容易上手、直接能跑**的全套教程！
+# 🎯 今天学习目标
+1. 什么是 requests？（模拟浏览器访问网站）
+2. 安装 requests
+3. 发送 **GET 请求**（最常用）
+4. 获取 **状态码、网页内容、响应头**
+5. 实战练习：爬取网页、获取接口数据
+6. 理解响应对象是什么
+# 一、什么是 requests？
+一句话：
+**requests = 让 Python 变成浏览器，可以访问任何网站/接口**
+你不用打开浏览器，代码一行就能：
+- 访问网页
+- 拿数据
+- 爬文本
+- 调接口
+- 下载内容
+# 二、第一步：安装（必须在虚拟环境里装）
+先激活你的 Conda 环境：
+```bash
+conda activate ai_env
+```
+安装：
+```bash
+pip install requests
+```
+✅ 安装成功！
+---
+# 三、核心知识点：发送 GET 请求
+## 最基础代码（直接复制运行）
+```python
+import requests  # 导入库
+# 1. 发送请求
+url = "https://www.baidu.com"
+response = requests.get(url)
+# 2. 查看状态码
+print("状态码:", response.status_code)
+# 3. 查看网页内容
+print("网页内容:\n", response.text)
+```
+运行成功 = 你已经学会了**最核心的网络请求**！
+---
+# 四、最重要的 4 个属性（必须背）
+```python
+response.status_code   # 状态码 200=成功
+response.text          # 网页文本内容
+response.content       # 二进制数据（图片/文件）
+response.json()        # 解析接口返回的JSON
+```
+---
+# 五、状态码代表什么？
+- **200** = 成功 ✅
+- 404 = 页面找不到
+- 500 = 服务器报错
+- 403 = 禁止访问
+---
+# 六、实战练习 1：访问公开接口（JSON 数据）
+```python
+import requests
+url = "https://api.github.com"
+res = requests.get(url)
+# 打印JSON数据
+data = res.json()
+print(data)
+print("GitHub 主页:", data["html_url"])
+``
+你会拿到 GitHub 官方接口数据 ✅
+--
+# 七、实战练习 2：带参数请求（搜索）
+```python
+import requests
+
+url = "https://www.baidu.com/s"
+params = {
+    "wd": "Python"
+}
+response = requests.get(url, params=params)
+print(response.text)
+```
+相当于浏览器搜索：`Python`
+---
+# 八、实战练习 3：获取图片并保存
+```python
+import requests
+img_url = "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d5572076ee.png"
+res = requests.get(img_url)
+# 保存图片
+with open("logo.png", "wb") as f:
+    f.write(res.content)
+```
+运行后，你会在文件夹看到**百度 LOGO 图片**！
+---
+# 🎯 今天必须掌握的 3 条核心代码
+```python
+# 发送请求
+res = requests.get(网址)
+# 看是否成功
+print(res.status_code)
+# 拿内容
+print(res.text)
+```
+---
+# 🚀 Day20 你学会了什么？
+✅ 安装 requests
+✅ 发送 GET 请求
+✅ 获取网页内容
+✅ 获取接口 JSON
+✅ 下载图片
+✅ 理解状态码
+✅ 完成 3 个实战
+**你现在已经可以写简单爬虫、调用接口了！**
+---
+# 我现在等你：
+你运行第一段代码
+```python
+import requests
+res = requests.get("https://www.baidu.com")
+print(res.status_code)
+```
+输出 **200** 就代表成功！

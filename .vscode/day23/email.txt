@@ -1,0 +1,309 @@
+# 🎉 Day24 最强实用工具：**自动发邮件 + 定时任务**
+你今天要学会 **Python 办公自动化最牛技能**：
+**定时 → 自动发邮件 → 不用管 → 自动运行**
+
+我教你 **最简单、100%能跑、不用复杂配置** 的版本！
+全程复制粘贴就能用！
+
+---
+
+# 🎯 今天学习目标
+1. 用 Python **自动发邮件**（纯文本 / 带内容）
+2. 学会 **定时任务**：每天/每小时/每分钟自动执行
+3. 做一个 **定时提醒工具**
+4. 做一个 **自动发送日报工具**
+
+---
+
+# 🚀 先讲原理（超简单）
+1. **smtplib**：Python 自带发邮件库
+2. **email**：构造邮件内容
+3. **schedule**：定时执行任务（超级简单）
+
+---
+
+# 一、先安装定时库
+```bash
+pip install schedule
+```
+
+---
+
+# 二、第一步：自动发邮件（必学）
+我给你 **QQ邮箱 / 163邮箱 通用代码**
+你只需要改 **邮箱账号 + 授权码**
+
+## 完整代码：send_mail.py
+```python
+import smtplib
+from email.mime.text import MIMEText
+
+# ---------------------- 【必须修改这里】----------------------
+sender_email = "你的邮箱@qq.com"    # 你的邮箱
+sender_pwd   = "你的授权码"         # 邮箱授权码
+receiver     = "接收邮箱@qq.com"    # 发给谁
+# ------------------------------------------------------------
+
+def send_email():
+    # 1. 邮件内容
+    content = "你好，这是Python自动发送的测试邮件！"
+    msg = MIMEText(content, "plain", "utf-8")
+    msg["From"] = sender_email
+    msg["To"]   = receiver
+    msg["Subject"] = "Python自动邮件测试"
+
+    # 2. 发送（QQ邮箱配置）
+    try:
+        with smtplib.SMTP_SSL("smtp.qq.com", 465) as server:
+            server.login(sender_email, sender_pwd)
+            server.sendmail(sender_email, receiver, msg.as_string())
+        print("✅ 邮件发送成功！")
+    except:
+        print("❌ 发送失败，请检查授权码")
+
+# 测试发送
+send_email()
+```
+
+---
+
+# 三、超级重要：**授权码是什么？**
+不是你的邮箱密码！
+是邮箱给第三方程序的**专用密码**
+
+## 获取方法（QQ邮箱）
+1. 登录邮箱 → 设置 → 账户
+2. 找到 **POP3/SMTP**
+3. 开启服务 → 获取 **16位授权码**
+4. 复制进代码里就能发！
+
+---
+
+# 四、第二步：**定时任务（超级简单）**
+用 `schedule` 库，定时执行函数！
+
+## 定时代码：timer.py
+```python
+import schedule
+import time
+
+def job():
+    print("✅ 定时任务执行：自动发邮件！")
+    send_email()  # 调用发邮件函数
+
+# ------------- 定时规则 -------------
+# 每分钟执行
+schedule.every(1).minutes.do(job)
+
+# 每小时执行
+# schedule.every(1).hours.do(job)
+
+# 每天固定时间 8:30 执行
+# schedule.every().day.at("08:30").do(job)
+
+print("⏰ 定时任务已启动，等待执行...")
+
+# 循环监听
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+```
+
+---
+
+# 五、Day24 终极项目：**定时自动发邮件工具**
+## 完整代码（直接复制运行）
+```python
+import smtplib
+import schedule
+import time
+from email.mime.text import MIMEText
+
+# ---------------------- 配置 ----------------------
+sender_email = "你的邮箱@qq.com"
+sender_pwd   = "你的授权码"
+receiver     = "接收邮箱@qq.com"
+# ---------------------------------------------------
+
+def send_email():
+    content = "这是Python定时自动发送的日报！"
+    msg = MIMEText(content, "plain", "utf-8")
+    msg["From"] = sender_email
+    msg["To"] = receiver
+    msg["Subject"] = "每日定时报告"
+
+    with smtplib.SMTP_SSL("smtp.qq.com", 465) as server:
+        server.login(sender_email, sender_pwd)
+        server.sendmail(sender_email, receiver, msg.as_string())
+    print("✅ 定时邮件发送成功！")
+
+# 每天 08:30 自动发
+schedule.every().day.at("08:30").do(send_email)
+
+print("⏰ 每日定时发邮件工具已启动！")
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+```
+
+---
+
+# 🎯 今天你学会了什么？
+✅ Python 自动发邮件
+✅ 邮箱授权码配置
+✅ 定时任务（每分钟/每小时/每天）
+✅ 自动发送日报/提醒工具
+✅ 办公自动化核心技能
+
+---
+
+# ✅ 你现在已经是 **Python自动化小能手** 了！
+
+我问你：
+**你想先跑通【自动发邮件】，还是直接跑【定时发邮件】？**
+# 🚀 完整版教程：**自动发邮件 + 定时任务**（一步一步跟着做，100%成功）
+我把**最完整、最安全、最简单**的代码给你，**不用改逻辑，只填邮箱信息就能跑！**
+
+今天你会做出：
+✅ 自动发邮件
+✅ 定时发邮件
+✅ 每天自动发日报/提醒
+✅ 关闭程序还能后台运行（可选）
+
+---
+
+# 一、先安装依赖（必须做）
+打开终端，确保在你的虚拟环境 `ai` 里：
+```bash
+pip install schedule
+```
+
+---
+
+# 二、第一步：先跑通 **自动发邮件**（先测试这个）
+## 完整代码：`send_mail.py`
+```python
+import smtplib
+from email.mime.text import MIMEText
+
+# ====================== 【你只需要改这里！】======================
+sender_email = "你的QQ邮箱@qq.com"    # 例如：12345678@qq.com
+sender_pwd   = "你的QQ邮箱授权码"     # 16位字符串，不是密码！
+receiver     = "接收邮箱地址"         # 可以发给自己
+# ================================================================
+
+def send_email():
+    # 邮件内容
+    content = "✅ 这是Python自动发送的测试邮件！"
+    msg = MIMEText(content, "plain", "utf-8")
+    
+    # 邮件头信息
+    msg["From"] = sender_email
+    msg["To"] = receiver
+    msg["Subject"] = "Python自动邮件测试"
+
+    # 发送（QQ邮箱固定配置）
+    try:
+        with smtplib.SMTP_SSL("smtp.qq.com", 465) as server:
+            server.login(sender_email, sender_pwd)
+            server.sendmail(sender_email, receiver, msg.as_string())
+        print("✅ 邮件发送成功！快去邮箱查看！")
+    except Exception as e:
+        print("❌ 发送失败，错误：", e)
+
+# 执行发送
+send_email()
+```
+
+---
+
+# 三、超级重要：**QQ邮箱授权码获取方法**（看这里！）
+1. 打开 **QQ 邮箱** → 点 **设置**
+2. 点 **账户**
+3. 找到 **POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务**
+4. 开启 **POP3/SMTP服务**
+5. **发送短信** 验证
+6. 复制 **16位授权码** 到代码里
+
+**授权码 = 代码里的 sender_pwd**
+
+---
+
+# 四、跑通后，我们直接上 **定时发邮件工具**（最终版）
+## 完整代码：`auto_mail_timer.py`
+```python
+import smtplib
+import schedule
+import time
+from email.mime.text import MIMEText
+
+# ====================== 【只改这里】======================
+sender_email = "你的QQ邮箱@qq.com"
+sender_pwd   = "你的授权码"
+receiver     = "接收邮箱"
+# ==========================================================
+
+def send_email():
+    content = "⏰ 定时任务执行成功！这是Python定时发送的邮件~"
+    msg = MIMEText(content, "plain", "utf-8")
+    msg["From"] = sender_email
+    msg["To"] = receiver
+    msg["Subject"] = "每日定时提醒"
+
+    try:
+        with smtplib.SMTP_SSL("smtp.qq.com", 465) as server:
+            server.login(sender_email, sender_pwd)
+            server.sendmail(sender_email, receiver, msg.as_string())
+        print("✅ 定时邮件发送成功！")
+    except Exception as e:
+        print("❌ 发送失败：", e)
+
+# ------------------- 定时设置 -------------------
+# 每 1 分钟发一次（测试用）
+schedule.every(1).minutes.do(send_email)
+
+# 每天早上 8:30 发一次（正式用）
+# schedule.every().day.at("08:30").do(send_email)
+# ------------------------------------------------
+
+print("⏰ 定时发邮件工具已启动！等待执行...")
+
+# 永久运行
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+```
+
+---
+
+# 🎯 你现在能实现什么？
+### 1. 测试模式
+每 **1分钟** 自动发一封邮件
+
+### 2. 正式模式
+每天 **早上8:30** 自动发邮件（日报/提醒）
+
+### 3. 你可以改成
+- 每小时发
+- 每周一发
+- 每天晚上发
+
+---
+
+# ✅ 你今天彻底掌握：
+✅ Python 发邮件（smtplib）
+✅ 邮箱授权码配置
+✅ 定时任务（schedule）
+✅ 自动办公工具开发
+✅ 完整可运行项目
+
+---
+
+# 我现在等你：
+先跑 **第一个代码 send_email.py**
+告诉我：
+## **邮件发送成功了吗？**
+
+成功了我再教你：
+**如何让定时工具后台一直运行，不占窗口！** 🚀
